@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+.auth/
+*.sqlite3
+*.sqlite3-*
+__pycache__/
+*.pyc
+.DS_Store
+._*
+data-project/
+data-tasks/
+data-task-chats/
