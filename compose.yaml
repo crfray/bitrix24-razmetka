@@ -1,0 +1,99 @@
+# Local development only. Published ports are bound to this computer's loopback.
+name: razmetka-local
+
+services:
+  init-data:
+    image: razmetka:local
+    build: .
+    user: "0:0"
+    entrypoint: ["python", "/init-data.py"]
+    command: []
+    restart: "no"
+    read_only: true
+    healthcheck:
+      disable: true
+    volumes:
+      - project-data:/data/project
+      - tasks-data:/data/tasks
+      - chats-data:/data/task-chats
+      - auth-data:/data/auth
+      - type: bind
+        source: ./deploy/init-data.py
+        target: /init-data.py
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./data-project
+        target: /seed/project
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./data-tasks
+        target: /seed/tasks
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./data-task-chats
+        target: /seed/task-chats
+        read_only: true
+        bind:
+          create_host_path: false
+
+  project:
+    image: razmetka:local
+    command: ["project"]
+    init: true
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    depends_on:
+      init-data:
+        condition: service_completed_successfully
+    environment:
+      AUTH_COOKIE_SECURE: "0"
+      # Origin follows Host; both localhost and 127.0.0.1 work locally.
+    ports:
+      - "127.0.0.1:8765:8000"
+    volumes:
+      - project-data:/data/main
+      - auth-data:/data/auth
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  tasks:
+    image: razmetka:local
+    command: ["tasks"]
+    init: true
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    depends_on:
+      init-data:
+        condition: service_completed_successfully
+    environment:
+      AUTH_COOKIE_SECURE: "0"
+    ports:
+      - "127.0.0.1:8766:8000"
+    volumes:
+      - tasks-data:/data/main
+      - chats-data:/data/task-chats
+      - auth-data:/data/auth
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  project-data:
+  tasks-data:
+  chats-data:
+  auth-data:

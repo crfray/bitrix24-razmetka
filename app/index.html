@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Разметка 2.0</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-row">
+    <div class="brand-box">
+      <button id="toggle-side" class="icon-btn" title="Скрыть или показать боковое меню">☰</button>
+      <span class="brand">Разметка&nbsp;2.0</span>
+    </div>
+    <div class="counts" id="counts"></div>
+    <button id="toggle-theme" class="ghost" title="Тема оформления">Тема: авто</button>
+    <button id="toggle-summary" class="ghost">Сводка</button>
+    <span id="auth-status" class="hint">Только просмотр</span>
+    <button id="auth-login" class="ghost">Войти для редактирования</button>
+    <button id="auth-logout" class="ghost" hidden>Выйти</button>
+    <button id="new-event" class="primary">Новое событие</button>
+  </div>
+  <input id="search" type="search" autocomplete="off"
+         placeholder="Поиск: слово, атрибут (type=task), несколько условий через пробел — И, через | — ИЛИ">
+</header>
+
+<div class="layout">
+  <aside class="side" id="side">
+    <div class="side-title">Инструменты</div>
+    <nav id="tools"></nav>
+    <div class="side-title">Приоритет</div>
+    <nav id="prios"></nav>
+    <div class="side-title">Задачи</div>
+    <nav id="tasks"></nav>
+    <div class="side-title">Состояние реализации</div>
+    <nav id="impls"></nav>
+    <div class="side-title">Состояние</div>
+    <nav id="states"></nav>
+  </aside>
+
+  <main class="main">
+    <div class="filters" id="flags"></div>
+    <div class="table-head">
+      <span id="result-count"></span>
+      <button id="reset" class="ghost" hidden>Сбросить фильтры</button>
+      <div class="hscroll" id="hscroll" hidden><div class="hscroll-thumb" id="hscroll-thumb"></div></div>
+      <span class="hint">Клик по ячейке открывает событие на нужном поле</span>
+    </div>
+    <section class="summary" id="summary" hidden></section>
+    <div class="scroll" id="table-wrap">
+      <table class="grid">
+        <thead id="head"></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div id="empty" class="empty" hidden>Ничего не нашлось.</div>
+  </main>
+</div>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-card">
+    <div class="sheet-head">
+      <strong id="sheet-title">Событие</strong>
+      <div class="sheet-actions">
+        <button id="delete-event" class="danger ghost">Удалить</button>
+        <button id="close-sheet" class="ghost">Закрыть</button>
+        <button id="save-event" class="primary">Сохранить</button>
+      </div>
+    </div>
+    <div id="readonly-banner" class="readonly-banner" hidden>
+      Недостаточно прав для изменения данных. Доступен только просмотр.
+      <button id="sheet-login" class="primary">Войти для редактирования</button>
+    </div>
+    <div class="sheet-body" id="sheet-body"></div>
+    <div class="sheet-foot"><span id="save-note"></span></div>
+  </div>
+</div>
+
+<div class="editor" id="editor" hidden>
+  <div class="editor-card">
+    <div class="editor-head">
+      <strong>Визуальные обозначения</strong>
+      <div class="editor-tools">
+        <button class="tool" data-tool="rect">Прямоугольник</button>
+        <button class="tool" data-tool="arrow">Стрелка</button>
+        <button class="tool" data-tool="pen">Маркер</button>
+        <button id="editor-undo" class="ghost">Отменить</button>
+        <button id="editor-clear" class="ghost">Очистить</button>
+      </div>
+      <div class="editor-actions">
+        <button id="editor-cancel" class="ghost">Отмена</button>
+        <button id="editor-save" class="primary">Сохранить</button>
+      </div>
+    </div>
+    <div class="editor-stage"><canvas id="editor-canvas"></canvas></div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" hidden>
+  <img id="lightbox-img" alt="">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+  <div class="lightbox-bar">
+    <button id="lightbox-edit" class="primary" hidden>Добавить визуальные обозначения</button>
+    <span class="lightbox-hint">Клик по фону или Escape — закрыть</span>
+  </div>
+</div>
+
+<dialog id="auth-dialog" aria-labelledby="auth-title">
+  <form id="auth-form">
+    <h2 id="auth-title">Вход для редактирования</h2>
+    <p id="auth-message">Для изменения данных требуется учётная запись редактора.</p>
+    <label for="auth-username">Логин</label>
+    <input id="auth-username" name="username" autocomplete="username" maxlength="80" required>
+    <label for="auth-password">Пароль</label>
+    <input id="auth-password" name="password" type="password" autocomplete="current-password" maxlength="256" required>
+    <p id="auth-error" role="alert"></p>
+    <div class="auth-actions">
+      <button id="auth-cancel" type="button" class="ghost">Отмена</button>
+      <button id="auth-submit" type="submit" class="primary">Войти</button>
+    </div>
+  </form>
+</dialog>
+<script src="auth.js"></script>
+<script src="editor.js"></script>
+<script src="filters.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

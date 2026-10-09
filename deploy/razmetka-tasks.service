@@ -1,0 +1,21 @@
+[Unit]
+Description=Razmetka 2.0 - tasks (8766)
+After=network.target
+
+[Service]
+Type=simple
+User=razmetka
+Group=razmetka
+WorkingDirectory=/opt/razmetka-2.0
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PORT=8766
+Environment=RAZMETKA_DATA_DIR=/opt/razmetka-2.0/data-tasks
+Environment=TASK_CHATS_DATA_DIR=/opt/razmetka-2.0/data-task-chats
+ExecStart=/usr/bin/python3 /opt/razmetka-2.0/server.py tasks
+Restart=on-failure
+RestartSec=3
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target

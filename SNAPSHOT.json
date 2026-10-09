@@ -1,0 +1,17 @@
+{
+  "created_utc": "2026-10-07T11:11:08.053187+00:00",
+  "source": "C:\\Users\\t.s.dampilov\\razmetka-2.0",
+  "counts": {
+    "data-project": 80,
+    "data-tasks": 120,
+    "data-task-chats": 50
+  },
+  "missing_media_references": [],
+  "verification": [
+    "source file hashes match copied files",
+    "both live APIs and all UI assets match snapshot",
+    "independent areas regression passed on temporary fixtures",
+    "both copied server modes started and matched live API state"
+  ],
+  "vps_tested": false
+}

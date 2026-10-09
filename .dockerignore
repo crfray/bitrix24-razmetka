@@ -1,0 +1,19 @@
+# Allow only the files needed to build the runtime image.
+**
+!Dockerfile
+!.dockerignore
+!server.py
+!space.py
+!auth.py
+!app/
+!app/**
+
+# Prevent editor/cache/secret files from entering through the app allowance.
+**/__pycache__/
+**/*.pyc
+**/.DS_Store
+**/.env
+**/.env.*
+**/*.sqlite3
+**/*.sqlite3-wal
+**/*.sqlite3-shm
