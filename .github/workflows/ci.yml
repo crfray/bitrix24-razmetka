@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]             # Проверять PR, направленные в main
+  push:
+    branches: [main]             # Проверять main после merge
+
+permissions:
+  contents: read                # Разрешить только чтение репозитория
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true       # Отменять устаревшую проверку той же ветки
+
+jobs:
+  tests:
+    name: Application tests
+    runs-on: ubuntu-24.04        # Выполнять на временной машине GitHub
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13" # Та же версия, что в Dockerfile
+
+      - name: Check Python syntax
+        run: |
+          python -m py_compile server.py space.py auth.py deploy/init-data.py verify_auth.py verify_areas.py
+
+      - name: Test authentication
+        run: python verify_auth.py
+
+      - name: Test independent data areas
+        run: python verify_areas.py
+
+  docker:
+    name: Docker build
+    needs: tests                # Собирать только после успешных тестов
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Build application image
+        run: docker build --tag razmetka:ci .
