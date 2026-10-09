@@ -166,4 +166,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-raise AssertionError("Intentional CI failure")
